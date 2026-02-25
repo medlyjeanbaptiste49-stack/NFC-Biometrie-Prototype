@@ -1,0 +1,58 @@
+# Configuration du projet NFC + biométrie
+
+Ce dossier contient les fichiers de configuration nécessaires pour assurer la reproductibilité des expériences.
+
+## Contenu
+
+1. **seeds.json**
+   - Contient les valeurs aléatoires fixées pour chaque type d’expérience.
+   - Exemple :
+     {
+       "spoof_attack": 12345,
+       "replay_attack": 67890,
+       "interception_attack": 54321
+     }
+   - Utilité : garantit que les résultats des simulations sont identiques à chaque exécution.
+
+2. **splits.json**
+   - Définit la répartition des données biométriques en ensembles d’entraînement, de test et de validation.
+   - Exemple :
+     {
+       "fingerprint": {
+         "train": 70,
+         "test": 20,
+         "validation": 10
+       },
+       "face": {
+         "train": 60,
+         "test": 30,
+         "validation": 10
+       }
+     }
+   - Utilité : évite le sur-apprentissage et assure une évaluation correcte des performances.
+
+3. **config.yaml**
+   - Contient les paramètres expérimentaux pour chaque type d’attaque.
+   - Exemple :
+     experiments:
+       spoof_attack:
+         dataset: fingerprint
+         attempts: 20
+         success_probability: 0.3
+       replay_attack:
+         input_log: results/transaction_log.csv
+         attempts: 15
+       interception_attack:
+         mode: live
+         duration: 60
+   - Utilité : documente les conditions de test (nombre de tentatives, type de dataset, durée des attaques).
+
+## Bonnes pratiques
+- Ne pas modifier les seeds une fois fixés, sauf pour lancer une nouvelle série d’expériences.
+- Toujours documenter les changements dans `config.yaml` avant de relancer les tests.
+- Vérifier que les splits de données correspondent aux datasets utilisés dans `data/`.
+
+## Reproductibilité
+- Les fichiers de configuration doivent être inclus dans toutes les versions du projet.
+- Les résultats générés dans `results/` doivent mentionner les seeds et splits utilisés.
+- Toute modification doit être tracée via Git (commit clair avec message explicatif).
