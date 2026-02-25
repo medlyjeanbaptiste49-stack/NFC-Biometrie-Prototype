@@ -1,0 +1,35 @@
+import random
+import json
+import datetime
+
+# Charger les seeds pour reproductibilité
+with open("config/seeds.json", "r") as f:
+    seeds = json.load(f)
+random.seed(seeds["spoof_attack"])
+
+# Simulation d'une attaque spoofing
+def spoof_attack(dataset="fingerprint", attempts=10):
+    results = []
+    for i in range(attempts):
+        # Probabilité de réussite d'une attaque (exemple simplifié)
+        success = random.random() < 0.3  # 30% de réussite
+        results.append({
+            "attempt": i + 1,
+            "dataset": dataset,
+            "success": success,
+            "timestamp": datetime.datetime.now().isoformat()
+        })
+    return results
+
+# Exécution principale
+if __name__ == "__main__":
+    dataset = "fingerprint"  # ou "face", "iris"
+    attempts = 20
+    logs = spoof_attack(dataset, attempts)
+
+    # Sauvegarde des résultats
+    output_file = f"results/spoof_attack_log_{dataset}.json"
+    with open(output_file, "w") as f:
+        json.dump(logs, f, indent=4)
+
+    print(f"[INFO] Résultats sauvegardés dans {output_file}")
